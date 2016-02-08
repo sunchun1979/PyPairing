@@ -1,0 +1,5 @@
+id,name,rank,history
+1,a,7,"B2-"
+2,b,7,"W1+"
+3,c,6,"B4+"
+4,d,6,"W3-"
