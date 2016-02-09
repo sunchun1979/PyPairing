@@ -34,8 +34,7 @@ def generate_new_round(dframe, total_round, this_round):
     dframe['mms'] = pandas.Series.from_array(dframe['rank'])
     for i, row in dframe['mms'].iteritems():
         dframe['mms'].set_value(i, ppGetMMS.get_mms(dframe['rank'][i], dframe['history'][i]))
-    sortedIndex = dframe['mms'].sort_values(ascending=True).index
-    sortedFrame = dframe.reindex(sortedIndex).reset_index(drop=True)
+    sortedFrame = dframe.sort(['mms']).reset_index(drop=True)
     oppset = []
     for i,item in sortedFrame['history'].iteritems():
         os=set()

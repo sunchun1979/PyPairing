@@ -8,7 +8,7 @@ def get_penalty(dframe, pairing, total_round):
         dm = dframe['mms'][i]-dframe['mms'][j]
         dp = dframe['rank'][i]-dframe['rank'][j]
         iw = dframe['history'][i].upper().count('W')
-        ib = dframe['history'][i].upper().count('B') - dframe['history'][i].upper().count('y')
+        ib = dframe['history'][i].upper().count('B') - dframe['history'][i].upper().count('y') #"Bye"
         jw = dframe['history'][j].upper().count('W')
         jb = dframe['history'][j].upper().count('B') - dframe['history'][j].upper().count('y')
         ic = iw-ib
