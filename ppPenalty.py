@@ -13,6 +13,5 @@ def get_penalty(dframe, pairing, total_round):
         jb = dframe['history'][j].upper().count('B') - dframe['history'][j].upper().count('y')
         ic = iw-ib
         jc = jw-jb
-        dr = abs(i-j)-(total_round)
-        penalty += (10000 * dm*dm + 100 * dp*dp + 10 * dr*dr + ic*ic + jc*jc)
+        penalty += (10000 * dm*dm + 100 * dp*dp + ic*ic + jc*jc)
     return penalty
