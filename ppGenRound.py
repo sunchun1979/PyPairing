@@ -2,6 +2,7 @@ import pandas
 import ppGetMMS
 import ppPenalty
 import itertools
+import random
 
 def get_mutation(df, pos, finalPairing, currentIndex, currentSet, oppSet, total_round):
     if (pos >= len(df)):
@@ -50,8 +51,9 @@ def generate_new_round(dframe, total_round, this_round):
     currentSet = set()
     get_mutation(sortedFrame, 0, finalPairing, currentIndex, currentSet, oppset, total_round)
     finalList = []
-    for k,v in sorted(finalPairing.iteritems()):
-        for item in v:
-            finalList.append((k, sortedFrame['id'].reindex(item).tolist()))
+    topPairings = sorted(finalPairing.iteritems())[0]
+    random.shuffle(topPairings[1])
+    for item in topPairings[1]:
+        finalList.append((topPairings[0], item))
 
-    return finalList
+    return finalList, sortedFrame
