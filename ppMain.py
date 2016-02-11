@@ -21,31 +21,31 @@ testCases = ['Test_Case1.txt']
 totalRound = 4
 
 for tFile in testCases:
-    dfRound = ppIO.read_round(tFile)
+    dfRound, handicapInfo = ppIO.read_round(tFile)
     for trial in range(0,1):
         resultFile = tFile.replace(".txt", "_Result_" + str(trial) + ".txt")
         sys.stdout = open(resultFile, 'w')
-        for i,iband in enumerate(dfRound):
-            handicap = iband[0]
-            if (handicap==1):
-                handicapTxt = "(Handicap)"
-            else:
-                handicapTxt = ""
-            print "[Section " + str(i+1) + "]" + handicapTxt + ": Initial Position"
-            print iband[1]
-            band = iband[1].copy()
-            for i in range(0,totalRound):
-                finalPairing, sortedFrame = ppGenRound.generate_new_round(band, totalRound, i)
+        for r in range(0,totalRound):
+            for i in range(0,len(dfRound)):
+                if (handicapInfo[i]==1):
+                    handicapTxt = "(Handicap)"
+                else:
+                    handicapTxt = ""
+                print "[Section " + str(i+1) + "]" + handicapTxt + ": Position before round " + str(r+1) + ":"
+                print dfRound[i]
+            print "\n"
+            for i in range(0, len(dfRound)):
+                finalPairing, sortedFrame = ppGenRound.generate_new_round(dfRound[i], totalRound, r)
                 #print finalPairing[0]
-                resTable = ppIO.print_pairing(finalPairing[0][1], band)
+                resTable = ppIO.print_pairing(finalPairing[0][1], dfRound[i])
                 result = gen_winner(resTable)
-                print "\nResult after round " + str(i+1) + ":"
+                print "\nResult after round " + str(r+1) + ":"
                 print result
-                band = ppUpdateRound.update_round(sortedFrame, result)
-                band = ppGetMMS.sort_by_mms(band, False)
-                print "\nStanding after round " + str(i+1) + ":"
-                print band
-                band.drop(['mms'],1)
+                dfRound[i] = ppUpdateRound.update_round(sortedFrame, result)
+                dfRound[i] = ppGetMMS.sort_by_mms(dfRound[i], False)
+                print "\nStanding after round " + str(r+1) + ":"
+                print dfRound[i]
+                dfRound[i].drop(['mms','soms','sodms'],1)
             print "\n=======\n"
 
 
