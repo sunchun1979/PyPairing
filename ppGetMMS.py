@@ -60,23 +60,3 @@ def sort_by_mms(dframeList, currentBand, dropAux = True, handicap = False):
             dframeList[j] = dframeList[j].drop(['mms','soms','sodms'],1)
 
     return dframeList[currentBand]
-    # dframe = dframeList[currentBand]
-    # dframe['mms'] = pandas.Series(0, index=dframe.index)
-    # dframe['soms'] = pandas.Series(0, index=dframe.index)
-    # dframe['sodms'] = pandas.Series(0, index=dframe.index)
-    # for i, row in dframe['mms'].iteritems():
-    #     dframe['mms'].set_value(i, get_mms(dframe['rank'][i], dframe['history'][i], handicap))
-    # mms = {}
-    # for i in range(0,len(dframe)):
-    #     mms[dframe['id'][i]] = dframe['mms'][i]
-    # # for j in range(0, len(dframeList)):
-    # #     for i in range(0, len(dframeList[j])):
-    # #         mms[dframeList[j]['id'][i]] = dframeList[j]['mms'][i]
-    # for i, row in dframe['soms'].iteritems():
-    #     dframe['soms'].set_value(i, get_soms(mms, dframe['history'][i]))
-    # for i, row in dframe['sodms'].iteritems():
-    #     dframe['sodms'].set_value(i, get_sodms(mms, dframe['history'][i]))
-    # dframe = dframe.sort(['mms','soms','sodms'],ascending=[False, False, False]).reset_index(drop=True)
-    # if (dropAux):
-    #     dframe = dframe.drop(['mms','soms','sodms'],1)
-    # return dframe

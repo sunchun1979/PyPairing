@@ -16,8 +16,8 @@ def gen_winner(match_name):
 
 # beginning of main entry
 
-#testCases = ['Test_Case1.txt', 'Test_Case2.txt', 'Test_Case3.txt']
-testCases = ['Test_Case1.txt']
+testCases = ['Test_Case2.txt', 'Test_Case3.txt']
+#testCases = ['Test_Case1.txt']
 totalRound = 4
 
 # Generate Test Cases
