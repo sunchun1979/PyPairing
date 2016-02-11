@@ -8,35 +8,40 @@ import sys
 import warnings
 warnings.simplefilter(action = "ignore", category = FutureWarning)
 
-def get_mutation(df, pos, finalPairing, currentIndex, currentSet, oppSet, total_round):
+def get_mutation(df, pos, finalPairing, currentIndex, currentSet, oppSet, total_round, totalCount):
     if (not finalPairing):
         lowest = sys.maxint
     else:
         lowest = min(finalPairing, key=finalPairing.get)
+    N = len(df)
+    # only approximation for large groups; performance concern
+    if (N>12 and totalCount[0]>N*(N-1)*(N-2)):
+        return
 
-    if (pos >= len(df)):
+    if (pos >= N):
         penalty = ppPenalty.get_penalty(df, currentIndex, total_round)
         if (not finalPairing.has_key(penalty)):
             finalPairing[penalty] = []
         if (penalty>lowest):
             return
         finalPairing[penalty].append(currentIndex[:])
+        totalCount[0] += 1
         return
     else:
-        for p1 in range(0, len(df)):
+        for p1 in range(0, N):
             if (p1 not in currentSet):
                 currentIndex.append(p1)
                 currentSet.add(p1)
-                for p2 in range(0, len(df)):
+                for p2 in range(0, N):
                     if (p2 not in currentSet):
                         if (df['id'][p2] not in oppSet[p1]):
                             currentIndex.append(p2)
                             currentSet.add(p2)
                             penalty = ppPenalty.get_penalty(df, currentIndex, total_round)
                             if (penalty<=lowest):
-                                get_mutation(df, pos + 2, finalPairing, currentIndex, currentSet, oppSet, total_round)
+                                get_mutation(df, pos + 2, finalPairing, currentIndex, currentSet, oppSet, total_round, totalCount)
                                 currentIndex[pos], currentIndex[pos+1] = currentIndex[pos+1], currentIndex[pos]
-                                get_mutation(df, pos + 2, finalPairing, currentIndex, currentSet, oppSet, total_round)
+                                get_mutation(df, pos + 2, finalPairing, currentIndex, currentSet, oppSet, total_round, totalCount)
                                 currentIndex[pos], currentIndex[pos+1] = currentIndex[pos+1], currentIndex[pos]
                             currentSet.remove(p2)
                             currentIndex.pop()
@@ -59,8 +64,9 @@ def get_foldpairing(n):
         pairing[2*i + 1 + mid] = mid + i
     return pairing
 
-def generate_new_round(dframe, total_round, this_round):
-    sortedFrame = ppGetMMS.sort_by_mms(dframe, False)
+def generate_new_round(dframeList, currentBand, total_round, this_round, handicap = False):
+    dframe = dframeList[currentBand]
+    sortedFrame = ppGetMMS.sort_by_mms(dframeList, currentBand, False, handicap)
     oppset = []
     for i,item in sortedFrame['history'].iteritems():
         os=set()
@@ -78,7 +84,8 @@ def generate_new_round(dframe, total_round, this_round):
         first_pairing = get_foldpairing(len(sortedFrame))
         finalList.append((0, first_pairing))
     else:
-        get_mutation(sortedFrame, 0, finalPairing, currentIndex, currentSet, oppset, total_round)
+        totalCount = [0]
+        get_mutation(sortedFrame, 0, finalPairing, currentIndex, currentSet, oppset, total_round, totalCount)
         topPairings = sorted(finalPairing.iteritems())[0]
         random.shuffle(topPairings[1])
         for item in topPairings[1]:
