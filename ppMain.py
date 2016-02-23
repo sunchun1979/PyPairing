@@ -16,7 +16,7 @@ def gen_winner(match_name):
 
 # beginning of main entry
 
-testCases = ['Test_Case2.txt', 'Test_Case3.txt']
+testCases = ['Test_Case2.txt']
 #testCases = ['Test_Case1.txt']
 totalRound = 4
 
@@ -83,7 +83,7 @@ for tFile in testCases:
             allSortedFrame = []
 
             for i in range(0, len(dfRound)-1):
-                finalPairing, sortedFrame = ppGenRound.generate_new_round(dfRound, i, totalRound, r, handicapInfo[i])
+                finalPairing, sortedFrame = ppGenRound.generate_new_round(dfRound, i,  r, handicapInfo[i])
                 allPairing.append(finalPairing)
                 allSortedFrame.append(sortedFrame)
 

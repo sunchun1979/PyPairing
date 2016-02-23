@@ -1,6 +1,6 @@
 import pandas
 
-def get_penalty(dframe, pairing, total_round):
+def get_penalty(dframe, pairing):
     penalty = 0;
     for p in range(0, len(pairing)/2):
         i = pairing[p*2];
