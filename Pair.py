@@ -51,5 +51,7 @@ def main(argv):
     pf['Result'] = ''
     pf.to_csv(outputFile, index=False)
 
+# Import-Csv .\P1.txt | ConvertTo-Html | Out-File 1.html
+
 if __name__ == '__main__':
     main(sys.argv[1:])
