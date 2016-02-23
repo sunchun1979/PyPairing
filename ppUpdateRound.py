@@ -3,6 +3,7 @@ def update_round(dframe, previous):
     for i in range(0, len(dframe)):
         ndict[dframe['name'][i]] = i
     for i in range(0, len(previous)):
+        if (not previous['Result'][i] in ndict): continue
         win = ndict[previous['Result'][i]]
         if (previous['Result'][i] == previous['Black'][i]):
             c = 'B'
