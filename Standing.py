@@ -1,6 +1,7 @@
 import sys
 import getopt
 import pandas
+import MMS
 
 def main(argv):
     inputFile = ''
@@ -33,7 +34,7 @@ def main(argv):
     dataframe1 = pandas.read_csv(inputFile)
     result = pandas.read_csv(resultFile)
     standing = azureml_main(dataframe1, result)
-    print standing
+    print standing.to_string(index=False)
     standing.to_csv(outputFile, index=False)
 
 # Import-Csv .\P1.txt | ConvertTo-Html | Out-File 1.html
@@ -51,7 +52,21 @@ def azureml_main(dataframe1 = None, results = None):
     if (dataframe1 is None):
         return pandas.DataFrame(columns=['id','name','rank','history'])
     rawframe = dataframe1.fillna("")
-    newframe = update_round(rawframe, results)
+    df, handicap = read_round(rawframe)
+    for i in range(0, len(df)-1):
+        df[i] = update_round(df[i], results)
+        df[i] = MMS.sort_by_mms(df, i, dropAux=False, handicap=handicap[i])
+        #allStanding.append(dfRound[i].copy())
+
+    #newframe = update_round(rawframe, results)
+    #newframe = pandas.concat(df, ignore_index=True)
+    newframe = df[0]
+    for i in range(1, len(df)-1):
+        if handicap[i]:
+            newframe.loc[len(newframe)] = ['&','&','&','&','&','&','&']
+        else:
+            newframe.loc[len(newframe)] = ['=','=','=','=','=','=','=']
+        newframe = newframe.append(df[i])
 
     # If a zip file is connected to the third input port is connected,
     # it is unzipped under ".\Script Bundle". This directory is added
@@ -68,6 +83,8 @@ def update_round(dframe, previous):
     for i in range(0, len(dframe)):
         ndict[dframe['name'][i]] = i
     for i in range(0, len(previous)):
+        if (previous['Result'][i] not in ndict):
+            continue
         win = ndict[previous['Result'][i]]
         if (previous['Result'][i] == previous['Black'][i]):
             c = 'B'
@@ -86,6 +103,31 @@ def update_round(dframe, previous):
             delim = ''
         dframe.set_value(loss, 'history', dframe['history'][loss] + delim + c + str(dframe['id'][win]) + '-')
     return dframe
+
+######################################################
+# data processing
+######################################################
+def read_round(rawframe): # with manual banding
+    rawframe = rawframe.fillna("")
+    dframe = []
+    handicapInfo = [False]
+    begin = 0
+    for i in range(0,len(rawframe)):
+        if (rawframe['id'][i]=='='):
+            dframe.append(rawframe.loc[begin:i-1].reset_index(drop=True))
+            begin = i+1
+            handicapInfo.append(False)
+        elif (rawframe['id'][i]=='&'):
+            dframe.append(rawframe.loc[begin:i-1].reset_index(drop=True))
+            begin = i+1
+            handicapInfo.append(True)
+    dframe.append(rawframe.loc[begin:].reset_index(drop=True))
+    dframe.append(rawframe.loc[[]].reset_index(drop=True))
+    for df in dframe:
+        df['id'] = df['id'].astype(int)
+        df['rank'] = df['rank'].astype(float)
+    return dframe, handicapInfo
+
 
 # Import-Csv .\P1.txt | ConvertTo-Html | Out-File 1.html
 
