@@ -1,7 +1,10 @@
-import sys
 import getopt
+import sys
+
 import pandas
+
 import MMS
+
 
 def main(argv):
     inputFile = ''

@@ -1,8 +1,11 @@
-import sys
 import getopt
-import pandas
 import random
+import sys
+
+import pandas
+
 import MMS
+
 
 def main(argv):
     inputFile = ''
@@ -35,7 +38,7 @@ def main(argv):
 
     dataframe1 = pandas.read_csv(inputFile)
     result = azureml_main(dataframe1, round-1)
-    print result
+    print result.to_string(index=False)
     result.to_csv(outputFile, index=False)
 
 # Import-Csv .\P1.txt | ConvertTo-Html | Out-File 1.html
