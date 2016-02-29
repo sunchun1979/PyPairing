@@ -16,8 +16,8 @@ def gen_winner(match_name):
 
 # beginning of main entry
 
-testCases = ['Test_Case2.txt']
-#testCases = ['Test_Case1.txt']
+#testCases = ['Test_Case2.txt']
+testCases = ['Test_Case1.txt']
 totalRound = 4
 
 # Generate Test Cases
@@ -43,7 +43,7 @@ for tFile in testCases:
             # this part should be done manually in real life
             # we have 20% chance of two people taking bye.
             # if single people took bye, opponent receive a Bye (manual) and a unrated fast game with TD
-            if (r!=0 and random.random()<0.2):
+            if (r!=0 and random.random()<0):
                 print " ** RE-BANDING ** "
 
                 #random band, random player
@@ -89,7 +89,7 @@ for tFile in testCases:
 
             for i in range(0, len(dfRound)-1):
                 finalPairing = allPairing[i]
-                resTable = ppIO.print_pairing(finalPairing[0][1], dfRound[i], handicapInfo[i])
+                resTable = ppIO.print_pairing(finalPairing[0][1], allSortedFrame[i], handicapInfo[i])
                 result = gen_winner(resTable)
                 allResults.append(result)
             print "Round " + str(r+1) + " results:"

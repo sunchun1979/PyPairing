@@ -34,7 +34,7 @@ def get_mutation(df, pos, finalPairing, currentIndex, currentSet, oppSet, totalC
                 currentSet.add(p1)
                 for p2 in range(0, N):
                     if (p2 not in currentSet):
-                        if (df['id'][p2] not in oppSet[p1]):
+                        if (df['id'][p2] not in oppSet[df['id'][p1]]):
                             currentIndex.append(p2)
                             currentSet.add(p2)
                             penalty = ppPenalty.get_penalty(df, currentIndex)
@@ -67,14 +67,14 @@ def get_foldpairing(n):
 def generate_new_round(dframeList, currentBand, this_round, handicap = False):
     dframe = dframeList[currentBand]
     sortedFrame = ppGetMMS.sort_by_mms(dframeList, currentBand, False, handicap)
-    oppset = []
+    oppset = {}
     for i,item in sortedFrame['history'].iteritems():
         os=set()
         if (item!=""):
             for opp in item.split(";"):
                 if (opp.lower() != 'bye'):
                     os.add(int(opp[1:-1]))
-        oppset.append(os)
+        oppset[sortedFrame['id'][i]] = os
 
     finalPairing = {}
     currentIndex = []
