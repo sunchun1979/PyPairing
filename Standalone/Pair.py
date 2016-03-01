@@ -62,6 +62,10 @@ def azureml_main(dataframe1, currentRound):
     for i in range(0, len(dframe)-1):
         finalPairing, sortedFrame = generate_new_round(dframe, i, currentRound, handicapInfo[i])
         resTable = print_pairing(finalPairing[0][1], sortedFrame, handicapInfo[i])
+        # if handicapInfo[i]:
+        #     result.loc[len(result)] = ['&','&','&','&','&']
+        # else:
+        #     result.loc[len(result)] = ['=','=','=','=','=']
         result = result.append(resTable)
 
     # Return value must be of a sequence of pandas.DataFrame

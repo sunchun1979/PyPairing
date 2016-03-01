@@ -6,19 +6,21 @@ def update_round(dframe, previous):
         if (not previous['Result'][i] in ndict): continue
         win = ndict[previous['Result'][i]]
         if (previous['Result'][i] == previous['Black'][i]):
-            c = 'B'
+            cw = 'B'
+            cl = 'W'
             loss = ndict[previous['White'][i]]
         else:
-            c = 'W'
+            cw = 'W'
+            cl = 'B'
             loss = ndict[previous['Black'][i]]
         if (dframe['history'][win]!=""):
             delim = ';'
         else:
             delim = ''
-        dframe.set_value(win, 'history', dframe['history'][win] + delim + c + str(dframe['id'][loss]) + '+')
+        dframe.set_value(win, 'history', dframe['history'][win] + delim + cw + str(dframe['id'][loss]) + '+')
         if (dframe['history'][loss]!=""):
             delim = ';'
         else:
             delim = ''
-        dframe.set_value(loss, 'history', dframe['history'][loss] + delim + c + str(dframe['id'][win]) + '-')
+        dframe.set_value(loss, 'history', dframe['history'][loss] + delim + cl + str(dframe['id'][win]) + '-')
     return dframe
