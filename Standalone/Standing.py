@@ -91,9 +91,11 @@ def update_round(dframe, previous):
         win = ndict[previous['Result'][i]]
         if (previous['Result'][i] == previous['Black'][i]):
             cw = 'B'
+            cl = 'W'
             loss = ndict[previous['White'][i]]
         else:
-            cl = 'W'
+            cw = 'W'
+            cl = 'B'
             loss = ndict[previous['Black'][i]]
         if (dframe['history'][win]!=""):
             delim = ';'
