@@ -53,7 +53,7 @@ def main(argv):
 def azureml_main(dataframe1, currentRound):
 
     # Execution logic goes here
-    result = pandas.DataFrame(columns=['Black','White','Handicap','Komi','Result'])
+    result = pandas.DataFrame(columns=['Table','Black','White','Handicap','Komi','Result'])
     if (dataframe1 is None):
         return result
 
@@ -67,6 +67,9 @@ def azureml_main(dataframe1, currentRound):
         # else:
         #     result.loc[len(result)] = ['=','=','=','=','=']
         result = result.append(resTable)
+	
+	for i in range(0, len(result)):
+		result.set_value(i,0,str(int(i+1)), True)
 
     # Return value must be of a sequence of pandas.DataFrame
     return result
@@ -98,7 +101,7 @@ def read_round(rawframe): # with manual banding
     return dframe, handicapInfo
 
 def print_pairing(pairing, dframe, handicapInfo=False):
-    pframe = pandas.DataFrame(columns=['Black','White','Handicap','Komi','Result'])
+    pframe = pandas.DataFrame(columns=['Table','Black','White','Handicap','Komi','Result'])
     for i in range(0, len(pairing)/2):
         bindex = pairing[2*i]
         windex = pairing[2*i+1]
@@ -123,7 +126,7 @@ def print_pairing(pairing, dframe, handicapInfo=False):
             else:
                 komi = "0.5"
                 handicap = str(rdiff)
-        pframe.loc[len(pframe)] = [bname,wname,handicap,komi,'']
+        pframe.loc[len(pframe)] = ["0",bname,wname,handicap,komi,'']
     return pframe
 
 ######################################################
