@@ -53,6 +53,7 @@ def sort_by_mms(dframeList, currentBand, dropAux = True, handicap = False):
         dframeList[j]['sodms'] = pandas.Series(0, index=dframeList[j].index)
         for i, row in dframeList[j]['mms'].iteritems():
             dframeList[j]['mms'].set_value(i, get_mms(dframeList[j]['rank'][i], dframeList[j]['history'][i], handicap))
+            print dframeList[j]['mms']
         for i in range(0,len(dframeList[j])):
             mms[dframeList[j]['id'][i]] = dframeList[j]['mms'][i]
     for j in range(0, len(dframeList)):
