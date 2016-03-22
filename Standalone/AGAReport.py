@@ -1,7 +1,7 @@
 import sys
 import getopt
 import pandas
-
+import urllib2
 
 def main(argv):
     agaidFile = ''
@@ -29,7 +29,18 @@ def main(argv):
     nameMap = {}
     for i in range(0, len(aga_id)):
         nameMap[aga_id['name'][i]] = aga_id['agaid'][i]
-    print >> outfile, aga_id.to_string(index=False)
+    for i in range(0, len(aga_id)):
+        currentId = aga_id['agaid'][i]
+        rank = aga_id['rank'][i]
+        reqstr = "http://www.usgo.org/ratings-lookup-id?PlayerID=" + str(currentId)
+        response = urllib2.urlopen(reqstr)
+        html = response.read()
+        key1 = "<td>" + str(currentId) + "</td>"
+        p1 = html.find(key1)
+        p2 = html.find("<td>", p1+5)
+        p3 = html.find("</td>",p2)
+        pname = html[p2+4:p3]
+        print >> outfile, currentId, pname, rank
 
     games = pandas.read_csv(resultFile)
     #print games
